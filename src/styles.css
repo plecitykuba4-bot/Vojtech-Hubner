@@ -160,7 +160,11 @@ button { font: inherit; color: inherit; }
   .t6-row, .t6-row.is-right { position: relative; flex-direction: row; }
   .t6-row .t6-item { width: 86%; }
   .t6-row.is-right .t6-item { margin-left: auto; }
-  .t6-pic { position: absolute; top: -26px; width: 96px; padding: 5px 5px 14px; margin: 0; z-index: 2; }
+  /* obrázek sedí nad horním rohem karty a zasahuje jen do jejího okraje, text nechává volný */
+  .t6-list { gap: 92px; margin-top: 56px; }
+  .t6-pic { position: absolute; top: -58px; width: 86px; padding: 5px 5px 12px; margin: 0; z-index: 2; }
+  /* na úzkém displeji by konektor jezdil přes text karet; kabel se kreslí dál */
+  .t6-plug { display: none; }
   .t6-row:not(.is-right) .t6-pic { right: -4px; }
   .t6-row.is-right .t6-pic { left: -4px; }
 }

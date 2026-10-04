@@ -163,8 +163,8 @@ button { font: inherit; color: inherit; }
   /* obrázek sedí nad horním rohem karty a zasahuje jen do jejího okraje, text nechává volný */
   .t6-list { gap: 92px; margin-top: 56px; }
   .t6-pic { position: absolute; top: -58px; width: 86px; padding: 5px 5px 12px; margin: 0; z-index: 2; }
-  /* na úzkém displeji by konektor jezdil přes text karet; kabel se kreslí dál */
-  .t6-plug { display: none; }
+  /* konektor jezdí pod kartami; Safari kreslí prvek s translate3d (konektor) nad sourozenci bez 3D vrstvy, proto má vlastní vrstvu i seznam */
+  .t6-list { transform: translate3d(0, 0, 0); }
   .t6-row:not(.is-right) .t6-pic { right: -4px; }
   .t6-row.is-right .t6-pic { left: -4px; }
 }

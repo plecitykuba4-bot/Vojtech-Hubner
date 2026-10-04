@@ -369,14 +369,33 @@ const CABLES_MOB: { x: number; color: string; link: number }[] = [
   { x: 2.0, color: "#18c37e", link: 0.28 },
 ];
 
+// Mobil: kamera a kotvy se spočítají tak, aby karta visela celá nad textem hera.
+// Čím méně místa nad textem, tím dál kamera couvne a scéna se zmenší.
+function mobileFit() {
+  const fov = 34, baseV = 2 * 13 * Math.tan(THREE.MathUtils.degToRad(fov / 2));
+  const fallback = { fov, z: 13, k: 1, badgeY: 6.3, top: 4.6 };
+  const h6 = document.querySelector<HTMLElement>(".h6"), hi = document.querySelector<HTMLElement>(".h6-hi");
+  if (!h6 || !hi) return fallback;
+  const H = h6.clientHeight;
+  // offsetTop nebere v potaz transformace z úvodní animace
+  const textTop = hi.offsetTop + (hi.offsetParent as HTMLElement | null)!.offsetTop;
+  const f = textTop / H, navF = 84 / H;
+  // karta (2,4) + mezera pod ní musí se vejít mezi navigaci a text
+  const V = Math.max(baseV, 2.9 / Math.max(0.15, f - navF));
+  const half = V / 2;
+  return { fov, z: V / (2 * Math.tan(THREE.MathUtils.degToRad(fov / 2))), k: V / baseV, badgeY: half - f * V + 0.35 + 5.56, top: half + 0.63 };
+}
+
 export function HeroScene({ running, onReady }: { running: boolean; onReady?: () => void }) {
-  const top = mobile ? 4.6 : 4.4;
+  const fit = useMemo(() => (mobile ? mobileFit() : null), []);
+  const top = fit ? fit.top : 4.4;
+  const k = fit ? fit.k : 1;
   const cables = mobile ? CABLES_MOB : CABLES_DESK;
   return (
     <Canvas
       frameloop={running ? "always" : "never"}
       dpr={[1, mobile ? 1.5 : 1.75]}
-      camera={{ position: [0, 0, 13], fov: mobile ? 34 : 26 }}
+      camera={{ position: [0, 0, fit ? fit.z : 13], fov: fit ? fit.fov : 26 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       shadows
       flat
@@ -386,9 +405,9 @@ export function HeroScene({ running, onReady }: { running: boolean; onReady?: ()
       <ambientLight intensity={0.5} />
       <directionalLight position={[4, 6, 8]} intensity={1.6} castShadow />
       <Physics gravity={[0, controls.gravity, 0]} timeStep={1 / 60} interpolate>
-        <Badge anchor={[mobile ? -0.4 : 2.0, mobile ? 6.3 : top, 0]} />
+        <Badge anchor={fit ? [-0.4 * k, fit.badgeY, 0] : [2.0, top, 0]} />
         {cables.map((c, i) => (
-          <Cable key={i} anchor={[c.x, top + 0.2, -0.6 - i * 0.25]} color={c.color} link={c.link} phase={i} />
+          <Cable key={i} anchor={[c.x * k, top + 0.2, -0.6 - i * 0.25]} color={c.color} link={c.link} phase={i} />
         ))}
         <Ready onReady={onReady} />
       </Physics>

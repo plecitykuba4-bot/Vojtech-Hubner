@@ -143,7 +143,7 @@ button { font: inherit; color: inherit; }
 .t6-svg path { fill: none; stroke-linecap: round; }
 .t6-cable-bg { stroke: rgba(255, 255, 255, 0.18); stroke-width: 10; stroke-dasharray: 2 16; }
 .t6-cable { stroke: var(--yellow); stroke-width: 12; }
-.t6-plug { position: absolute; left: 0; top: 0; width: 34px; height: 46px; border-radius: 8px; background: #fff; box-shadow: inset 0 -14px 0 var(--yellow), 0 8px 20px rgba(0, 0, 0, 0.25); z-index: 2; }
+.t6-plug { position: absolute; left: 0; top: 0; width: 34px; height: 46px; border-radius: 8px; background: #fff; box-shadow: inset 0 -14px 0 var(--yellow), 0 8px 20px rgba(0, 0, 0, 0.25); z-index: 0; }
 .t6-list { position: relative; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 70px; z-index: 1; }
 /* řádek události: karta na jedné straně, obrázek u protějšího okraje */
 .t6-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; }

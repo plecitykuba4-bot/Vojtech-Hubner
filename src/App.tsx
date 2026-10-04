@@ -14,13 +14,14 @@ const HeroScene = lazy(() => import("./scene/HeroScene").then((m) => ({ default:
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ICONS = [Code, ShareNetwork, Browser];
 const CARD = ["#2f6bff", "#ff6a2b", "#18c37e"];
+// x/y = desktop, mx/my = mobil (samolepky kolem fotky, ať ji nezakrývají)
 const STICKERS = [
-  { t: "ČVUT FEL", c: "#2f6bff", x: 6, y: 8, r: -8 },
-  { t: "Praha", c: "#ffd23f", x: 58, y: 4, r: 6 },
-  { t: "SQL", c: "#111111", x: 70, y: 60, r: -4 },
-  { t: "Create value", c: "#ff6a2b", x: 4, y: 74, r: 4 },
-  { t: "LAN", c: "#18c37e", x: 40, y: 82, r: -10 },
-  { t: "Káva?", c: "#ffffff", x: 76, y: 28, r: 12 },
+  { t: "ČVUT FEL", c: "#2f6bff", x: 6, y: 8, r: -8, mx: 4, my: 4 },
+  { t: "Praha", c: "#ffd23f", x: 58, y: 4, r: 6, mx: 64, my: 3 },
+  { t: "SQL", c: "#111111", x: 70, y: 60, r: -4, mx: 3, my: 48 },
+  { t: "Create value", c: "#ff6a2b", x: 4, y: 74, r: 4, mx: 5, my: 82 },
+  { t: "LAN", c: "#18c37e", x: 40, y: 82, r: -10, mx: 68, my: 86 },
+  { t: "Káva?", c: "#ffffff", x: 76, y: 28, r: 12, mx: 74, my: 42 },
 ];
 
 export default function App() {
@@ -162,7 +163,7 @@ export default function App() {
         cleanups.push(() => ro.disconnect());
       }
       gsap.utils.toArray<HTMLElement>(".t6-item").forEach((el, i) => {
-        gsap.from(el, { x: i % 2 ? 60 : -60, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 80%" } });
+        gsap.from(el, { x: (i % 2 ? 1 : -1) * (innerWidth < 768 ? 24 : 60), opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 80%" } });
       });
       // obrázky u událostí přiletí s rotací
       gsap.utils.toArray<HTMLElement>(".t6-pic").forEach((el) => {
@@ -278,7 +279,7 @@ export default function App() {
           <div className="board6" aria-label="Nástěnka se samolepkami, dají se přetahovat">
             <Polaroid />
             {STICKERS.map((s) => (
-              <span key={s.t} className="st6" style={{ left: `${s.x}%`, top: `${s.y}%`, rotate: `${s.r}deg`, background: s.c, color: s.c === "#ffd23f" || s.c === "#ffffff" ? "#111" : "#fff" }}>{s.t}</span>
+              <span key={s.t} className="st6" style={{ "--x": `${s.x}%`, "--y": `${s.y}%`, "--mx": `${s.mx}%`, "--my": `${s.my}%`, rotate: `${s.r}deg`, background: s.c, color: s.c === "#ffd23f" || s.c === "#ffffff" ? "#111" : "#fff" } as React.CSSProperties}>{s.t}</span>
             ))}
           </div>
         </section>
@@ -537,11 +538,11 @@ function Coffee() {
       <div className="coffee6-pick">
         <fieldset>
           <legend>Který den?</legend>
-          <div className="chips6">{contact.days.map((d) => <button key={d} type="button" aria-pressed={day === d} className={day === d ? "is-on" : ""} onClick={() => setDay(day === d ? null : d)}>{d}</button>)}</div>
+          <div className="chips6" style={{ "--n": contact.days.length } as React.CSSProperties}>{contact.days.map((d) => <button key={d} type="button" aria-pressed={day === d} className={day === d ? "is-on" : ""} onClick={() => setDay(day === d ? null : d)}>{d}</button>)}</div>
         </fieldset>
         <fieldset>
           <legend>Kdy?</legend>
-          <div className="chips6">{contact.times.map((t) => <button key={t} type="button" aria-pressed={time === t} className={time === t ? "is-on" : ""} onClick={() => setTime(time === t ? null : t)}>{t}</button>)}</div>
+          <div className="chips6" style={{ "--n": contact.times.length } as React.CSSProperties}>{contact.times.map((t) => <button key={t} type="button" aria-pressed={time === t} className={time === t ? "is-on" : ""} onClick={() => setTime(time === t ? null : t)}>{t}</button>)}</div>
         </fieldset>
         <button type="button" className="btn6 btn6-big" onClick={send}>{contact.send}</button>
       </div>

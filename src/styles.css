@@ -14,7 +14,9 @@
   color-scheme: light;
 }
 *, *::before, *::after { box-sizing: border-box; }
-html { background: var(--yellow); }
+/* nic nesmí rozšířit stránku do strany: na mobilu by se pak celý web posouval vodorovně */
+html { background: var(--yellow); overflow-x: clip; }
+main { overflow-x: clip; }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 body { margin: 0; color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: clip; font-variation-settings: "wdth" 100; }
@@ -52,7 +54,7 @@ button { font: inherit; color: inherit; }
 
 /* ---------- hero (žlutá) ---------- */
 /* pozadí hera: rozmazaná ulice z Vojtovy fotky, vlevo pod textem přechází do žluté */
-.h6 { position: relative; min-height: 100dvh; background: var(--yellow) url("/img/hero-bg.jpg") center / cover no-repeat; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); overflow: hidden; }
+.h6 { position: relative; min-height: 100svh; background: var(--yellow) url("/img/hero-bg.jpg") center / cover no-repeat; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); overflow: hidden; }
 .h6::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(90deg, rgba(255, 210, 63, 0.97) 0%, rgba(255, 210, 63, 0.9) 34%, rgba(255, 210, 63, 0.35) 62%, rgba(255, 210, 63, 0.12) 100%); }
 .h6-copy { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; padding: 100px var(--gutter) 60px; pointer-events: none; }
 .h6-copy a { pointer-events: auto; }
@@ -69,7 +71,7 @@ button { font: inherit; color: inherit; }
 @media (max-width: 767px) {
   .h6 { grid-template-columns: 1fr; }
   .h6::before { background: linear-gradient(rgba(255, 210, 63, 0.3) 0%, rgba(255, 210, 63, 0.45) 38%, rgba(255, 210, 63, 0.96) 58%); }
-  .h6-copy { justify-content: flex-end; padding: 0 var(--gutter) 32px; min-height: 100dvh; }
+  .h6-copy { justify-content: flex-end; padding: 0 var(--gutter) 32px; min-height: 100svh; }
   .h6-title { font-size: clamp(40px, 11vw, 56px); line-height: 1.14; }
   .c6-title { line-height: 1.1; }
   .h6-hint { display: none; }
@@ -125,6 +127,12 @@ button { font: inherit; color: inherit; }
 .board6 { position: relative; aspect-ratio: 1.1; border-radius: var(--r); background: #e9e9e3; overflow: hidden; touch-action: pan-y; }
 .st6 { position: absolute; display: inline-block; padding: 12px 20px 14px; border-radius: 99px; font-weight: 800; font-size: clamp(18px, 1.6vw, 24px); font-variation-settings: "wdth" 110; cursor: grab; user-select: none; box-shadow: 0 8px 0 rgba(0, 0, 0, 0.12); border: 3px solid #fff; }
 .st6:active { cursor: grabbing; }
+.st6:not(.st6-photo) { left: var(--x); top: var(--y); }
+@media (max-width: 767px) {
+  .board6 { aspect-ratio: 0.78; }
+  .st6:not(.st6-photo) { left: var(--mx); top: var(--my); padding: 8px 14px 10px; font-size: 16px; border-width: 2.5px; }
+  .st6-photo { width: 52% !important; left: 24% !important; top: 19% !important; }
+}
 @media (max-width: 767px) { .a6 { grid-template-columns: 1fr; } }
 
 /* ---------- cesta (modrá) ---------- */
@@ -173,6 +181,13 @@ button { font: inherit; color: inherit; }
 .chips6 button { cursor: pointer; width: 8.6rem; height: 52px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 99px; border: 2.5px solid var(--ink); background: transparent; font-weight: 700; font-size: 15px; transition: background-color 0.2s, color 0.2s, transform 0.15s; }
 .chips6 button:hover { transform: translateY(-2px); }
 .chips6 button.is-on { background: var(--ink); color: var(--yellow); }
+/* mobil: dny v jedné řadě, časy ve druhé */
+@media (max-width: 767px) {
+  .coffee6-pick { align-items: stretch; }
+  .chips6 { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 6px; }
+  .chips6 button { width: auto; height: 46px; font-size: 14px; }
+  .btn6-big { justify-content: center; }
+}
 .c6-links { margin-top: 48px; display: flex; gap: 30px; flex-wrap: wrap; font-size: 18px; font-weight: 700; }
 .c6-links a { border-bottom: 2.5px solid var(--ink); padding-bottom: 2px; }
 
